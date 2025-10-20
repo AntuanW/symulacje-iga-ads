@@ -16,7 +16,7 @@
         -B /build \
         -D CMAKE_BUILD_TYPE=Release \
         -D ADS_USE_GALOIS=ON \
-        -D ADS_USE_MUMPS=ON \
+        -D ADS_USE_MUMPS=OFF \
         -D CMAKE_PREFIX_PATH=/deps
 
 @build:

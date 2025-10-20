@@ -1,0 +1,96 @@
+[1/80] Building CXX object CMakeFiles/ads-objects.dir/src/ads/bspline/bspline.cpp.o
+[2/80] Building CXX object CMakeFiles/ads-objects.dir/src/ads/quad/gauss_data.cpp.o
+[3/80] Building CXX object CMakeFiles/ads-objects.dir/src/ads/basis_data.cpp.o
+[4/80] Building CXX object CMakeFiles/ads-objects.dir/src/ads/simulation/simulation_base.cpp.o
+[5/80] Building CXX object CMakeFiles/ads-objects.dir/src/ads/form_matrix.cpp.o
+[6/80] Building CXX object CMakeFiles/ads-objects.dir/src/ads/executor/galois.cpp.o
+[7/80] Building CXX object CMakeFiles/ads-objects.dir/src/ads/simulation/dimension.cpp.o
+[8/80] Building CXX object CMakeFiles/ads-objects.dir/src/ads/version.cpp.o
+[9/80] Building CXX object CMakeFiles/ads-objects.dir/src/ads/simulation/simulation_1d.cpp.o
+[10/80] Building CXX object CMakeFiles/ads-objects.dir/src/ads/simulation/simulation_2d.cpp.o
+[11/80] Building CXX object CMakeFiles/ads-objects.dir/src/ads/simulation/simulation_3d.cpp.o
+[12/80] Linking CXX static library libads.a
+[13/80] Building CXX object tests/CMakeFiles/ads-suite.dir/ads/bspline/eval_test.cpp.o
+[14/80] Building CXX object tests/CMakeFiles/ads-suite.dir/ads/bspline/bspline_test.cpp.o
+[15/80] Building CXX object tests/CMakeFiles/ads-suite.dir/ads/basis_data_test.cpp.o
+[16/80] Building CXX object tests/CMakeFiles/ads-suite.dir/ads/util/multi_array_test.cpp.o
+[17/80] Building CXX object tests/CMakeFiles/ads-suite.dir/ads/lin/dense_solve_test.cpp.o
+[18/80] Building CXX object tests/CMakeFiles/ads-suite.dir/ads/lin/band_solve_test.cpp.o
+[19/80] Building CXX object tests/CMakeFiles/ads-suite.dir/ads/lin/tensor_test.cpp.o
+[20/80] Building CXX object tests/CMakeFiles/ads-suite.dir/ads/solver_test.cpp.o
+[21/80] Linking CXX executable tests/suite
+[22/80] Building CXX object examples/CMakeFiles/ads-example-heat_3d.dir/heat/heat_3d.cpp.o
+[23/80] Linking CXX executable examples/heat_3d
+[24/80] Building CXX object examples/CMakeFiles/ads-example-heat_1d.dir/heat/heat_1d.cpp.o
+[25/80] Linking CXX executable examples/heat_1d
+[26/80] Building CXX object examples/CMakeFiles/ads-example-heat_2d.dir/heat/heat_2d.cpp.o
+[27/80] Linking CXX executable examples/heat_2d
+[28/80] Building CXX object examples/CMakeFiles/ads-example-scalability.dir/scalability/main.cpp.o
+[29/80] Linking CXX executable examples/scalability
+[30/80] Building CXX object examples/CMakeFiles/ads-example-flow.dir/flow/main.cpp.o
+[31/80] Linking CXX executable examples/flow
+[32/80] Building CXX object examples/CMakeFiles/ads-example-linear_elasticity.dir/elasticity/main.cpp.o
+[33/80] Linking CXX executable examples/linear_elasticity
+[34/80] Building CXX object examples/CMakeFiles/ads-example-elasticity_victor.dir/elasticity/victor.cpp.o
+[35/80] Linking CXX executable examples/elasticity_victor
+[36/80] Building CXX object examples/CMakeFiles/ads-example-elasticity_pouria.dir/elasticity/elasticity_pouria.cpp.o
+[37/80] Linking CXX executable examples/elasticity_pouria
+[38/80] Building CXX object examples/CMakeFiles/ads-example-validation.dir/validation/main.cpp.o
+[39/80] Linking CXX executable examples/validation
+[40/80] Building CXX object examples/CMakeFiles/ads-example-pollution.dir/pollution/main.cpp.o
+[41/80] Linking CXX executable examples/pollution
+[42/80] Building CXX object examples/CMakeFiles/ads-example-pollution_dpg.dir/pollution/dpg.cpp.o
+[43/80] Linking CXX executable examples/pollution_dpg
+[44/80] Building CXX object examples/CMakeFiles/ads-example-pollution_dpg_3d.dir/pollution/dpg3d.cpp.o
+[45/80] Linking CXX executable examples/pollution_dpg_3d
+[46/80] Building CXX object examples/CMakeFiles/ads-example-victor.dir/victor/main.cpp.o
+[47/80] Linking CXX executable examples/victor
+[48/80] Building CXX object examples/CMakeFiles/ads-example-multistep.dir/multistep/scheme.cpp.o
+[49/80] Building CXX object examples/CMakeFiles/ads-example-maxwell-common.dir/maxwell/state.cpp.o
+[50/80] Building CXX object examples/CMakeFiles/ads-example-maxwell-common.dir/maxwell/spaces.cpp.o
+[51/80] Building CXX object examples/CMakeFiles/ads-example-erikkson.dir/erikkson/main.cpp.o
+[52/80] Linking CXX executable examples/erikkson
+[53/80] Building CXX object examples/CMakeFiles/ads-example-maxwell-common.dir/maxwell/results.cpp.o
+[54/80] Building CXX object examples/CMakeFiles/ads-example-multistep.dir/multistep/main.cpp.o
+[55/80] Linking CXX executable examples/multistep
+[56/80] Building CXX object examples/CMakeFiles/ads-example-maxwell-common.dir/maxwell/maxwell_base.cpp.o
+[57/80] Building CXX object examples/CMakeFiles/ads-example-demkowicz.dir/demkowicz/main.cpp.o
+[58/80] Building CXX object examples/CMakeFiles/ads-example-maxwell_ads.dir/maxwell/head_data.cpp.o
+[59/80] Linking CXX executable examples/demkowicz
+[60/80] Building CXX object examples/CMakeFiles/ads-example-maxwell_ads.dir/maxwell/maxwell_head_problem.cpp.o
+[61/80] Building CXX object examples/CMakeFiles/ads-example-tumor.dir/tumor/vasculature/plot.cpp.o
+[62/80] Building CXX object examples/CMakeFiles/ads-example-tumor.dir/tumor/vasculature/vasculature.cpp.o
+[63/80] Building CXX object examples/CMakeFiles/ads-example-tumor.dir/tumor/tumor_main.cpp.o
+[64/80] Building CXX object examples/CMakeFiles/ads-example-tumor.dir/tumor/tumor.cpp.o
+[65/80] Building CXX object examples/CMakeFiles/ads-example-tumor_3d.dir/tumor/3d/vasculature_parser.cpp.o
+[66/80] Linking CXX executable examples/tumor
+[67/80] Building CXX object examples/CMakeFiles/ads-example-maxwell_uniform.dir/maxwell/main_uniform.cpp.o
+[68/80] Linking CXX executable examples/maxwell_uniform
+[69/80] Building CXX object examples/CMakeFiles/ads-example-maxwell_ads.dir/maxwell/main_ads.cpp.o
+[70/80] Linking CXX executable examples/maxwell_ads
+[71/80] Building CXX object examples/CMakeFiles/ads-example-implicit.dir/implicit/main.cpp.o
+[72/80] Linking CXX executable examples/implicit
+[73/80] Building CXX object examples/CMakeFiles/ads-example-coupled.dir/implicit/coupled.cpp.o
+[74/80] Building CXX object examples/CMakeFiles/ads-example-tumor_3d.dir/tumor/3d/main.cpp.o
+[75/80] Linking CXX executable examples/coupled
+[76/80] Linking CXX executable examples/tumor_3d
+[77/80] Building CXX object examples/CMakeFiles/ads-example-fire.dir/fire/fire.cpp.o
+In file included from /code/examples/fire/fire.cpp:4:
+/code/examples/fire/fire.hpp: In lambda function:
+/code/examples/fire/fire.hpp:98:36: warning: unused parameter 'x' [-Wunused-parameter]
+   98 |         auto fuel_init = [](double x, double y) { return 1; };
+      |                             ~~~~~~~^
+/code/examples/fire/fire.hpp:98:46: warning: unused parameter 'y' [-Wunused-parameter]
+   98 |         auto fuel_init = [](double x, double y) { return 1; };
+      |                                       ~~~~~~~^
+/code/examples/fire/fire.hpp: In lambda function:
+/code/examples/fire/fire.hpp:129:22: warning: variable 'x' set but not used [-Wunused-but-set-variable]
+  129 |                 auto x = point(e, q);
+      |                      ^
+/code/examples/fire/fire.hpp: In member function 'void ads::problems::fire::compute_rhs(double)':
+/code/examples/fire/fire.hpp:116:29: warning: unused parameter 't' [-Wunused-parameter]
+  116 |     void compute_rhs(double t) {
+      |                      ~~~~~~~^
+[78/80] Linking CXX executable examples/fire
+[79/80] Building CXX object tools/CMakeFiles/ads-error.dir/error.cpp.o
+[80/80] Linking CXX executable tools/ads-error
