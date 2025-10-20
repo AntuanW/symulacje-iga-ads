@@ -1,8 +1,8 @@
 @image:
-    podman build -t iga-ads:latest .
+    docker build -t iga-ads:latest .
 
 @shell:
-    podman run \
+    docker run \
         --rm \
         --interactive \
         --tty \
