@@ -11,6 +11,8 @@ HEIGHT=480
 echo "set terminal gif animate optimize size ${WIDTH},${HEIGHT} delay $DELAY loop 0" > "$GNUPLOT_SCRIPT"
 echo "set output '$OUTPUT_GIF'" >> "$GNUPLOT_SCRIPT"
 
+echo "plot 'init.data' with image" >> "$GNUPLOT_SCRIPT"
+
 ls -1 out_*.data | sed 's/out_//; s/\.data//' | sort -n | sed "s/^/plot 'out_/; s/$/\.data' with image/" >> "$GNUPLOT_SCRIPT"
 
 echo "set output" >> "$GNUPLOT_SCRIPT"
