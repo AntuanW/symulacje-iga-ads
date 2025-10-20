@@ -18,5 +18,6 @@ echo "set output" >> "$GNUPLOT_SCRIPT"
 gnuplot "$GNUPLOT_SCRIPT"
 
 rm "$GNUPLOT_SCRIPT"
+rm *.data
 
 echo "Done. Animation saved as: $OUTPUT_GIF"
