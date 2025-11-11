@@ -14,7 +14,7 @@ int main(int argc, char* argv[]) {
 
     // p=2, n=200
     ads::dim_config dim{p, n, 0.0, 100.0};
-    ads::timesteps_config steps{10000, 1e-3};
+    ads::timesteps_config steps{6000, 1e-3};
     int ders = 1;
 
     ads::config_2d c{dim, dim, steps, ders};

@@ -11,6 +11,73 @@
 #include "ads/simulation.hpp"
 #include "ads/util.hpp"
 
+#include <vector>
+#include <string>
+
+// Patryk Wicher
+// Bazowa prędkość wiatru w obu kierunkach (ujemna, bo wieje DO lewego dolnego rogu)
+constexpr double BASE_WIND_SPEED = 8.0;
+// Amplituda porywów (jak bardzo wiatr "szaleje" wokół wartości bazowej)
+constexpr double GUST_AMPLITUDE = 2.5;
+// Częstotliwość zmian w czasie (jak szybko zmieniają się porywy)
+constexpr double TIME_FREQUENCY = 0.3;
+// Częstotliwość zmian w przestrzeni (jak "gęste" są wiry)
+constexpr double SPACE_FREQUENCY_X = 0.05;
+constexpr double SPACE_FREQUENCY_Y = 0.08;
+// ---------------------------------
+
+std::vector<std::vector<int>> load_fuel_matrix(const std::string& file_path) {
+    std::ifstream file(file_path);
+    std::vector<std::vector<int>> fuel_matrix;
+    std::string line;
+
+    while (getline(file, line)) {
+        std::istringstream iss(line);
+        std::vector<int> row;
+        std::string val;
+
+        while (getline(iss, val, ',')) {
+            row.push_back(std::stoi(val));
+        }
+
+        fuel_matrix.push_back(row);
+    }
+
+    return fuel_matrix;
+}
+
+inline double custom_wind_bx(double x, double y, double t) {
+    // 1. Dominujący kierunek (z prawa na lewo -> ujemny)
+    double base_flow = -BASE_WIND_SPEED;
+
+    // 2. Chaos/porywy zależne od czasu i miejsca (używamy sin)
+    // Mieszamy x, y i t, aby uzyskać złożony, "chaotyczny" wzór
+    double chaos = GUST_AMPLITUDE * std::sin(
+        SPACE_FREQUENCY_X * x + SPACE_FREQUENCY_Y * y + TIME_FREQUENCY * t
+    );
+
+    return base_flow + chaos;
+}
+
+inline double custom_wind_by(double x, double y, double t) {
+    // 1. Dominujący kierunek (z góry na dół -> ujemny)
+    double base_flow = -BASE_WIND_SPEED;
+
+    // 2. Chaos/porywy (używamy cos i innych częstotliwości, 
+    //    aby składowa 'by' nie była zsynchronizowana z 'bx')
+    double chaos = GUST_AMPLITUDE * std::cos(
+        SPACE_FREQUENCY_Y * x + SPACE_FREQUENCY_X * y - TIME_FREQUENCY * t * 0.8
+    );
+
+    return base_flow + chaos;
+}
+
+
+inline double custom_wind(double x, double t) {
+    // Zmienność wiatru w kierunku x zależna od czasu i przestrzeni
+    return 20 * sin(t / 24.0 * 2 * M_PI) * sin(x / 100.0 * 2 * M_PI);
+}
+
 inline double falloff(double r, double R, double t) {
     if (t < r)
         return 1.0;
@@ -21,8 +88,8 @@ inline double falloff(double r, double R, double t) {
 }
 
 inline double bump(double r, double R, double x, double y) {
-    double dx = x - 50;
-    double dy = y - 50;
+    double dx = x - 60;
+    double dy = y - 60;
     double t = std::sqrt(dx * dx + dy * dy) / 100;
     return falloff(r / 200, R / 200, t);
 }
@@ -45,8 +112,8 @@ private:
     // double T0 = 1;
     // double bx = 40;
     // double by = 20;
-    double bx = 0;
-    double by = 0;
+    //double bx = 0;
+    //double by = 0;
 
     double ch = 1.0;
     double Ar = 5.7e-5;
@@ -81,8 +148,8 @@ public:
     , output{x.B, y.B, 300} { }
 
     double init_state(double x, double y) {
-        double r = 10;
-        double R = 30;
+        double r = 5;
+        double R = 5;
         return T0 + Tcomb * bump(r, R, x, y);
     };
 
@@ -90,12 +157,19 @@ private:
     void before() override {
         prepare_matrices();
 
+        std::string fuel_matrix_path = "mapa_paliwa_100x100.csv";
+        std::vector<std::vector<int>> fuel_matrix = load_fuel_matrix(fuel_matrix_path);
+
         auto init = [this](double x, double y) { return init_state(x, y); };
         projection(u, init);
         solve(u);
         output.to_file(u, "out_0.data");
 
-        auto fuel_init = [](double x, double y) { return 1; };
+        auto fuel_init = [&fuel_matrix](double x, double y) {
+            int ix = static_cast<int>(x);
+            int iy = static_cast<int>(y);
+            return fuel_matrix[99 - iy][ix];
+        };
         projection(fuel, fuel_init);
         solve(fuel);
         output.to_file(fuel, "fuel_0.data");
@@ -127,6 +201,9 @@ private:
             for (auto q : quad_points()) {
                 double w = weight(q);
                 auto x = point(e, q);
+
+                double bx = custom_wind_bx(x[0], x[1], t);
+                double by = custom_wind_by(x[0], x[1], t);
 
                 value_type u = eval_fun(u_prev, e, q);
                 value_type fuel = eval_fun(fuel_prev, e, q);
