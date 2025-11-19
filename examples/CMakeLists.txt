@@ -209,3 +209,7 @@ add_example(poisson_2d MUMPS GALOIS
 add_example(fire GALOIS
   SRC
   fire/fire.cpp)
+
+add_example(oil2d GALOIS
+  SRC
+  oil/oil_2d.cpp)
