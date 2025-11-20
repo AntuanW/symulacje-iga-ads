@@ -1,4 +1,4 @@
-#include "oil2d.hpp"
+#include "oil_2d.hpp"
 
 
 int main() {

@@ -6,6 +6,35 @@
 #include "ads/executor/galois.hpp"
 #include "ads/output_manager.hpp"
 #include "ads/simulation.hpp"
+#include <iostream>
+#include <fstream>
+
+void read_permeability_map(double** perm_map, int& img_size){
+    
+    std::ifstream infile("/code/examples/oil/prem_map.txt");
+    int i = 0;
+    int size=1;
+    double dp;
+    if (!infile.is_open()) std::cout << "couldt open file!\n";
+    
+    while (infile >> dp){
+        std::cout << dp << "\n";
+        if (i==0){
+            size = (int)dp;
+            
+            *perm_map = (double*) malloc(size*size*sizeof(double));
+            if (!*perm_map){
+                std::cout << "couldnt read file!\n";
+                break;
+            }
+            std::cout << "mem allocated\n";
+        } else {
+            (*perm_map)[i-1] = dp;
+        }
+        i++;
+    }
+    img_size = size;
+}
 
 namespace ads {
 
@@ -95,8 +124,18 @@ private:
     vector_type u, u_prev;
 
     galois_executor executor{4};
+    double* permeability_map = nullptr;
+    int image_size;
 
-    pumps process = pumps{{{0.25, 0.25}, {0.75, 0.75}}, {{0.25, 0.75}, {0.75, 0.25}}};
+    pumps process = pumps{
+        // ŹRÓDŁA (POMPY):
+        // Jedna duża pompa w lewym dolnym "sercu" złoża
+        {{0.20, 0.20}},   
+
+        // OD PŁYWY (DRENY):
+        // Jeden odpływ w prawym górnym rogu, żeby wymusić przepływ przez środek
+        {{0.80, 0.80}}        
+    };
     lin::tensor<double, 4> kq;
     output_manager<2> output;
 
@@ -109,27 +148,29 @@ public:
     , output{x.B, y.B, 100} { }
 
     double init_state(double x, double y) {
-        double r = 0.1;
-        double R = 0.5;
-        return 1e-3 * ads::bump(r, R, x, y);
+        return 0.0;
     };
 
 private:
     void before() override {
+        read_permeability_map(&permeability_map,image_size);
         fill_permeability_map();
         prepare_matrices();
 
         auto init = [this](double x, double y) { return init_state(x, y); };
         projection(u, init);
         solve(u);
-        output.to_file(u, "out_%d.data", 0);
+        output.to_file(u, "data/out/out_%d.data", 0);
     }
 
     void fill_permeability_map() {
         for (auto e : elements()) {
             for (auto q : quad_points()) {
                 auto x = point(e, q);
-                kq(e[0], e[1], q[0], q[1]) = 1e2;  // permeability function
+                
+                int index = (x[0] * (image_size-1)) + image_size * (x[1]*(image_size-1));
+                // std::cout << x[0]* << ", " << x[1]*512 << ", " << permeability_map[index] << std::endl;
+                kq(e[0], e[1], q[0], q[1]) = permeability_map[index];  // wczytane z mapy
             }
         }
     }
@@ -191,7 +232,7 @@ private:
             std::cout << "Step " << iter << ", energy: " << energy(u) << std::endl;
         }
         if ((iter + 1) % 100 == 0) {
-            output.to_file(u, "out_%d.data", iter + 1);
+            output.to_file(u, "data/out/out_%d.data", iter + 1);
         }
     }
 
