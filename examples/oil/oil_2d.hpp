@@ -9,31 +9,32 @@
 #include <iostream>
 #include <fstream>
 
-void read_permeability_map(double** perm_map, int& img_size){
+void read_permeability_map(double** perm_map, int& img_size) {
+    std::ifstream infile("examples/oil/prem_map.txt");
     
-    std::ifstream infile("/code/examples/oil/prem_map.txt");
-    int i = 0;
-    int size=1;
-    double dp;
-    if (!infile.is_open()) std::cout << "couldt open file!\n";
-    
-    while (infile >> dp){
-        std::cout << dp << "\n";
-        if (i==0){
-            size = (int)dp;
-            
-            *perm_map = (double*) malloc(size*size*sizeof(double));
-            if (!*perm_map){
-                std::cout << "couldnt read file!\n";
-                break;
-            }
-            std::cout << "mem allocated\n";
-        } else {
-            (*perm_map)[i-1] = dp;
-        }
-        i++;
+    if (!infile.is_open()) {
+        std::cerr << "BLAD: Nie mozna otworzyc pliku mapy: examples/oil/prem_map.txt" << std::endl;
+        img_size = 2;
+        *perm_map = (double*)malloc(img_size * img_size * sizeof(double));
+        for(int k=0; k<4; k++) (*perm_map)[k] = 1.0;
+        return;
     }
-    img_size = size;
+
+    double size_d;
+    if (infile >> size_d) {
+        int size = (int)size_d;
+        img_size = size;
+        *perm_map = (double*)malloc(size * size * sizeof(double));
+        
+        double val;
+        int i = 0;
+        while (infile >> val && i < size * size) {
+            (*perm_map)[i] = val;
+            i++;
+        }
+        std::cout << "Wczytano mape przepuszczalnosci: " << size << "x" << size << std::endl;
+    }
+    infile.close();
 }
 
 namespace ads {
@@ -89,7 +90,7 @@ struct pumps {
     std::vector<ads::vec2d> sinks;
 
     static constexpr double radius = 0.15;
-    static constexpr double pumping_strength = 1;
+    static constexpr double pumping_strength = 1000;
     static constexpr double draining_strength = 1e5;
 
     double pumping(double x, double y) const {
@@ -128,14 +129,12 @@ private:
     int image_size;
 
     pumps process = pumps{
-        // ŹRÓDŁA (POMPY):
-        // Jedna duża pompa w lewym dolnym "sercu" złoża
-        {{0.20, 0.20}},   
+    // ŹRÓDŁA (POMPY) - dwa punkty: (0.2, 0.2) oraz (0.2, 0.8)
+    {{0.20, 0.20}, {0.20, 0.80}},
 
-        // OD PŁYWY (DRENY):
-        // Jeden odpływ w prawym górnym rogu, żeby wymusić przepływ przez środek
-        {{0.80, 0.80}}        
-    };
+    // ODPŁYWY (DRENY) - dwa punkty: (0.8, 0.2) oraz (0.8, 0.8)
+    {{0.80, 0.20}, {0.80, 0.80}}
+};
     lin::tensor<double, 4> kq;
     output_manager<2> output;
 
