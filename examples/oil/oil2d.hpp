@@ -6,36 +6,6 @@
 #include "ads/executor/galois.hpp"
 #include "ads/output_manager.hpp"
 #include "ads/simulation.hpp"
-#include <iostream>
-#include <fstream>
-
-void read_permeability_map(double** perm_map, int& img_size) {
-    std::ifstream infile("examples/oil/prem_map.txt");
-    
-    if (!infile.is_open()) {
-        std::cerr << "BLAD: Nie mozna otworzyc pliku mapy: examples/oil/prem_map.txt" << std::endl;
-        img_size = 2;
-        *perm_map = (double*)malloc(img_size * img_size * sizeof(double));
-        for(int k=0; k<4; k++) (*perm_map)[k] = 1.0;
-        return;
-    }
-
-    double size_d;
-    if (infile >> size_d) {
-        int size = (int)size_d;
-        img_size = size;
-        *perm_map = (double*)malloc(size * size * sizeof(double));
-        
-        double val;
-        int i = 0;
-        while (infile >> val && i < size * size) {
-            (*perm_map)[i] = val;
-            i++;
-        }
-        std::cout << "Wczytano mape przepuszczalnosci: " << size << "x" << size << std::endl;
-    }
-    infile.close();
-}
 
 namespace ads {
 
@@ -90,7 +60,7 @@ struct pumps {
     std::vector<ads::vec2d> sinks;
 
     static constexpr double radius = 0.15;
-    static constexpr double pumping_strength = 1000;
+    static constexpr double pumping_strength = 1;
     static constexpr double draining_strength = 1e5;
 
     double pumping(double x, double y) const {
@@ -125,16 +95,8 @@ private:
     vector_type u, u_prev;
 
     galois_executor executor{4};
-    double* permeability_map = nullptr;
-    int image_size;
 
-    pumps process = pumps{
-    // ŹRÓDŁA (POMPY) - dwa punkty: (0.2, 0.2) oraz (0.2, 0.8)
-    {{0.20, 0.20}, {0.20, 0.80}},
-
-    // ODPŁYWY (DRENY) - dwa punkty: (0.8, 0.2) oraz (0.8, 0.8)
-    {{0.80, 0.20}, {0.80, 0.80}}
-};
+    pumps process = pumps{{{0.25, 0.25}, {0.75, 0.75}}, {{0.25, 0.75}, {0.75, 0.25}}};
     lin::tensor<double, 4> kq;
     output_manager<2> output;
 
@@ -147,29 +109,27 @@ public:
     , output{x.B, y.B, 100} { }
 
     double init_state(double x, double y) {
-        return 0.0;
+        double r = 0.1;
+        double R = 0.5;
+        return 1e-3 * ads::bump(r, R, x, y);
     };
 
 private:
     void before() override {
-        read_permeability_map(&permeability_map,image_size);
         fill_permeability_map();
         prepare_matrices();
 
         auto init = [this](double x, double y) { return init_state(x, y); };
         projection(u, init);
         solve(u);
-        output.to_file(u, "data/out/out_%d.data", 0);
+        output.to_file(u, "out_%d.data", 0);
     }
 
     void fill_permeability_map() {
         for (auto e : elements()) {
             for (auto q : quad_points()) {
                 auto x = point(e, q);
-                
-                int index = (x[0] * (image_size-1)) + image_size * (x[1]*(image_size-1));
-                // std::cout << x[0]* << ", " << x[1]*512 << ", " << permeability_map[index] << std::endl;
-                kq(e[0], e[1], q[0], q[1]) = permeability_map[index];  // wczytane z mapy
+                kq(e[0], e[1], q[0], q[1]) = 1e2;  // permeability function
             }
         }
     }

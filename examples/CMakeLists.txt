@@ -212,4 +212,4 @@ add_example(fire GALOIS
 
 add_example(oil2d GALOIS
   SRC
-  oil/oil_2d.cpp)
+  oil/oil2d.cpp)
