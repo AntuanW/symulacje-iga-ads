@@ -115,7 +115,7 @@ struct pumps {
     std::vector<ads::vec2d> sinks;
 
     static constexpr double radius = 0.15;
-    static constexpr double pumping_strength = 1000;
+    static constexpr double pumping_strength = 2000;
     static constexpr double draining_strength = 1e5;
 
     double pumping(double x, double y) const {
@@ -171,7 +171,7 @@ public:
    double init_state(double x, double y) {
         // Zwracamy 0, aby startować z "pustego" złoża.
         // Dzięki temu zobaczymy wyłącznie wpływ pomp i drenów.
-        return 0.0; 
+        return 0.1; 
     };
 
 private:
@@ -224,7 +224,7 @@ private:
                 double w = weight(q);
                 auto x = point(e, q);
 
-                double mi = 10;
+                double mi = 4;
                 double k = permeability(e, q);
                 value_type u = eval_fun(u_prev, e, q);
                 double h = forcing(x, t, u.val);
